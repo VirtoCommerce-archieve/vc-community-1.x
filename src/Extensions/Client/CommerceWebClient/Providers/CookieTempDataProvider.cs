@@ -8,6 +8,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Web.Security;
 
 namespace VirtoCommerce.Web.Client.Providers
 {
@@ -88,7 +89,7 @@ namespace VirtoCommerce.Web.Client.Providers
         string Protect(byte[] data)
         {
             if (data == null || data.Length == 0) return null;
-            var encryptedBytes = ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
+            var encryptedBytes = MachineKey.Protect(data, null);
             return Convert.ToBase64String(encryptedBytes);
         }
 
@@ -97,7 +98,7 @@ namespace VirtoCommerce.Web.Client.Providers
             if (String.IsNullOrWhiteSpace(value)) return null;
 
             var encryptedBytes = Convert.FromBase64String(value);
-            return ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.CurrentUser);
+            return MachineKey.Unprotect(encryptedBytes, null);
         }
 
         byte[] Compress(string value)
