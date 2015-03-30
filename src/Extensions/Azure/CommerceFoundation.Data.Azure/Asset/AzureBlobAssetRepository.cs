@@ -119,8 +119,7 @@ namespace VirtoCommerce.Foundation.Data.Azure.Asset
 
         public bool Exists(string blobKey)
         {
-            var root = AzureConfiguration.Instance.AzureStorageAccount.BlobEndpoint.AbsoluteUri;
-            var container = CurrentCloudBlobClient.GetContainerReference(root);
+            var container = CurrentCloudBlobClient.GetContainerReference(CurrentCloudBlobClient.BaseUri.AbsoluteUri);
             var cloudBlob = container.GetBlockBlobReference(blobKey);
             return cloudBlob.Exists();
         }
