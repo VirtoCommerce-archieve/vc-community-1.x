@@ -87,7 +87,7 @@ namespace VirtoCommerce.Foundation.Data.Azure.Asset
 
                     // generate thumbnail
                     memoryStream.Position = 0;
-                    var thumbBytes = GenerateThumb(memoryStream, 100, 100);
+                    var thumbBytes = GenerateThumb(memoryStream, 100, 100, 8000);
                     SaveThumb(thumbBytes, blob);
                 }
 
@@ -140,7 +140,7 @@ namespace VirtoCommerce.Foundation.Data.Azure.Asset
                 using (var dataStream = new MemoryStream())
                 {
                     cloudBlob.DownloadToStream(dataStream);
-                    result = GenerateThumb(dataStream, 100, 100);
+                    result = GenerateThumb(dataStream, 100, 100, 8000);
                     SaveThumb(result, cloudBlob);
                 }
             }
@@ -794,7 +794,7 @@ namespace VirtoCommerce.Foundation.Data.Azure.Asset
             return result;
         }
 
-        private static byte[] GenerateThumb(MemoryStream sourceStream, int width, int height)
+        private static byte[] GenerateThumb(MemoryStream sourceStream, int width, int height, int maxString64Size = 0)
         {
             byte[] result = null;
             try
@@ -811,7 +811,7 @@ namespace VirtoCommerce.Foundation.Data.Azure.Asset
                     graphics.InterpolationMode = InterpolationMode.Low;
                     graphics.CompositingMode = CompositingMode.SourceCopy;
                     graphics.DrawImage(source, 0, 0, newSize.Width, newSize.Height);
-
+                    
                     // Compress and save
                     var parameters = new EncoderParameters(1);
                     parameters.Param[0] = new EncoderParameter(Encoder.Quality, 80L);
@@ -821,12 +821,16 @@ namespace VirtoCommerce.Foundation.Data.Azure.Asset
                     {
                         target.Save(memoryStream, encoderJpeg, parameters);
                         var thumbBytes = memoryStream.ToArray();
+                        if (maxString64Size > 0 && Convert.ToBase64String(thumbBytes).Length > maxString64Size && width > 20 && height > 20)
+                            thumbBytes = GenerateThumb(sourceStream, width - 20, height - 20, maxString64Size);
+
+                        sourceStream.Position = 0;
                         // return original bytes if generated thumbnail is bigger than original image.
                         if (thumbBytes.Length < sourceStream.Length)
                         {
                             result = thumbBytes;
                         }
-                        else
+                        else if (maxString64Size > 0 && Convert.ToBase64String(sourceStream.ToArray()).Length < maxString64Size)
                         {
                             sourceStream.Position = 0;
                             result = sourceStream.ToArray();
