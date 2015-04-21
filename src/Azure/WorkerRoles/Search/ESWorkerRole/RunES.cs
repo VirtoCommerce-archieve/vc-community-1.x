@@ -14,9 +14,9 @@ namespace VirtoCommerce.Azure.WorkerRoles.ElasticSearch
         /// <summary>
         /// Function to start ES exe
         /// </summary>
-        /// <param name="esLocation"></param>
+        /// <param name="cacheLocation"></param>
         /// <param name="fsPort"></param>
-        public Process StartES(string esLocation, string fsPort, string workerIPs)
+        public Process StartES(string cacheLocation, string fsPort, string workerIPs)
         {
             // create VHD that will contain the instance
             var dataLocation = GetElasticDataDirectory();
@@ -25,10 +25,10 @@ namespace VirtoCommerce.Azure.WorkerRoles.ElasticSearch
             CreateElasticStoragerDirs(dataLocation);
             
             // Call the RunCommand function to change the port in server.xml
-            RunCommand(Settings.ElasticSetupCommand, esLocation, fsPort, Settings.ElasticAppRootDir);
+            // RunCommand(Settings.ElasticSetupCommand, esLocation, fsPort, Settings.ElasticAppRootDir);
             
             // Call the StartTomcatProcess to start the tomcat process
-            return StartESProcess(esLocation, dataLocation, workerIPs);
+            return StartESProcess(Settings.ElasticAppRootDir, dataLocation, workerIPs);
         }
 
         private string GetElasticDataDirectory()

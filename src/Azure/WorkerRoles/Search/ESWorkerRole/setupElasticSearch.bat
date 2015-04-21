@@ -1,7 +1,10 @@
 @echo off
 
-echo robocopy %3\es "%1" /E
-robocopy %3\es "%1" /E
+REM echo robocopy %3\es "%1" /E
+REM robocopy %3\es "%1" /E
+
+echo xcopy /I /E /Y %3\es "%1"
+xcopy /I /E /Y %3\es "%1"
 
 rem %3\TomcatConfigManager.exe %es_home%\conf\server.xml %2
 
