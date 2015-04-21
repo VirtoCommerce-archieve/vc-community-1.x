@@ -28,7 +28,7 @@ namespace VirtoCommerce.Azure.WorkerRoles.ElasticSearch
             // RunCommand(Settings.ElasticSetupCommand, esLocation, fsPort, Settings.ElasticAppRootDir);
             
             // Call the StartTomcatProcess to start the tomcat process
-            return StartESProcess(Settings.ElasticAppRootDir + @"\es", dataLocation, workerIPs);
+            return StartESProcess(Path.Combine(Settings.ElasticAppRootDir, "es"), dataLocation, workerIPs);
         }
 
         private string GetElasticDataDirectory()
@@ -116,9 +116,9 @@ namespace VirtoCommerce.Azure.WorkerRoles.ElasticSearch
                 newProc.StartInfo.EnvironmentVariables.Add("ES_HOSTS", workerIPs);
                 
                 // setting the file name  bin\startup.bat in tomcatlocation of localresourcepath 
-                newProc.StartInfo.FileName = esLocation + Settings.ElasticStartApp;
+                newProc.StartInfo.FileName = Path.Combine(esLocation, Settings.ElasticStartApp);
 
-                DiagnosticsHelper.TraceInformation("ElasticSearch start command line: " + esLocation + Settings.ElasticStartApp);
+                DiagnosticsHelper.TraceInformation("ElasticSearch start command line: " + newProc.StartInfo.FileName);
                 // starting process
                 newProc.Start();
                 DiagnosticsHelper.TraceInformation("Done - Starting ElasticSearch");
