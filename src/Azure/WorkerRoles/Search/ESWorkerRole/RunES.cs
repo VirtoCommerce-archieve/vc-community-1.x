@@ -104,12 +104,8 @@ namespace VirtoCommerce.Azure.WorkerRoles.ElasticSearch
                 newProc.StartInfo.CreateNoWindow = true;
 #endif
                 newProc.EnableRaisingEvents = false;
-
-                // setting the localsource path tomcatlocation to the environment variable catalina_home 
-                // newProc.StartInfo.EnvironmentVariables.Remove("CATALINA_HOME");  
-                // newProc.StartInfo.EnvironmentVariables.Add("CATALINA_HOME", fsLocation.Substring(0, fsLocation.Length - 1));
                 newProc.StartInfo.EnvironmentVariables.Remove("JAVA_HOME");  
-                newProc.StartInfo.EnvironmentVariables.Add("JAVA_HOME", esLocation.Substring(0, esLocation.Length - 1) + @"\jre7");
+                newProc.StartInfo.EnvironmentVariables.Add("JAVA_HOME", Path.Combine(esLocation, "jre7"));
 
                 // setting the localsource path tomcatlocation to the environment variable catalina_home 
                 newProc.StartInfo.EnvironmentVariables.Add("ES_DATA", Path.Combine(Path.Combine(cacheLocation, "ElasticStorage"), "data"));
