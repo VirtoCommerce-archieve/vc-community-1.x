@@ -28,7 +28,7 @@ namespace VirtoCommerce.Azure.WorkerRoles.ElasticSearch
             // RunCommand(Settings.ElasticSetupCommand, esLocation, fsPort, Settings.ElasticAppRootDir);
             
             // Call the StartTomcatProcess to start the tomcat process
-            return StartESProcess(Settings.ElasticAppRootDir, dataLocation, workerIPs);
+            return StartESProcess(Settings.ElasticAppRootDir + @"\es", dataLocation, workerIPs);
         }
 
         private string GetElasticDataDirectory()
