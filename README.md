@@ -1,6 +1,8 @@
 Virto Commerce Community Edition
 ============
 
+[![Join the chat at https://gitter.im/VirtoCommerce/vc-community-1.x](https://badges.gitter.im/VirtoCommerce/vc-community-1.x.svg)](https://gitter.im/VirtoCommerce/vc-community-1.x?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Developed by the team that created Mediachase eCommerce Framework (now EPiServer Commerce), Virto Commerce is the 
 only enterprise level e-commerce product fully available under Open Source license. Virto Commerce is based on .NET 4.5 
 with extensive use of MVC, IoC, EF, Azure and many other cutting edge technologies.
