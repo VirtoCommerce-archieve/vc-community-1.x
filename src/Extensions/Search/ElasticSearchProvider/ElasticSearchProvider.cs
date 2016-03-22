@@ -393,8 +393,14 @@ namespace VirtoCommerce.Search.Providers.Elastic
                 {
                     if (String.IsNullOrEmpty(mapping) || !mapping.Contains(String.Format("\"{0}\"", key)))
                     {
-                        var type = field.Value != null ? field.Value.GetType() : null;
-                        var propertyMap = new CustomPropertyMap<ESDocument>(field.Name, type)
+                        var type = field.Value != null ? field.Value.GetType() : typeof(object);
+                        if (type == typeof(decimal))
+                        {
+                            type = typeof(double);
+                        }
+                        var elasticType = ElasticCoreTypeMapper.GetElasticType(type);
+
+                        var propertyMap = new CustomPropertyMap<ESDocument>(field.Name, elasticType)
                         .Store(field.ContainsAttribute(IndexStore.YES))
                         .When(field.ContainsAttribute(IndexType.NOT_ANALYZED), p => p.Index(IndexState.not_analyzed))
                         .When(field.Name.StartsWith("__content", StringComparison.OrdinalIgnoreCase), p => p.Analyzer(SearchAnalyzer))
@@ -478,6 +484,9 @@ namespace VirtoCommerce.Search.Providers.Elastic
 
                 if (result.error != null && !result.acknowledged)
                     throw new IndexBuildException(result.error);
+
+                var core = GetCoreName(scope, documentType);
+                _mappings.Remove(core);
             }
             catch (OperationException ex)
             {
