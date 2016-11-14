@@ -7,7 +7,7 @@ with extensive use of MVC, IoC, EF, Azure and many other cutting edge technologi
 
 Website: http://virtocommerce.com
 
-Documentation: http://docs.virtocommerce.com
+Documentation: https://virtocommerce.com/docs/old-versions
 
 Online Demo: http://virtocommerce.com/try-now
 
